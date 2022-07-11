@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Customer/OnboardCustomer",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHttpMethod": [ "Post" ],
       "SwaggerKey": "Customer"
 
     },
@@ -52,7 +52,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Customer/LocalGovt",
-      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHttpMethod": [ "Get" ],
       "SwaggerKey": "Customer"
 
     },
@@ -69,6 +69,20 @@
       "UpstreamHttpMethod": [ "Get" ],
       "SwaggerKey": "Customer"
 
+    },
+    {
+      "DownstreamPathTemplate": "/api/Customer/GetAllCustomer",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 60243
+        }
+      ],
+      "UpstreamPathTemplate": "/Customer/GetAllCustomer",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "Customer"
+
     }
   ],
   "SwaggerEndPoints": [
@@ -76,9 +90,9 @@
       "Key": "Customer",
       "Config": [
         {
-          "Name": "Customer API",
+          "Name": "OCELOT GATEWAY API",
           "Version": "v1",
-          "Url": "http://localhost:5021/swagger/v1/swagger.json"
+          "Url": "http://localhost:60243/swagger/v1/swagger.json"
         }
       ]
     }
