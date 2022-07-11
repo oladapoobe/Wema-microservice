@@ -9,7 +9,7 @@
     using Microsoft.Extensions.Logging;
     using Swashbuckle.AspNetCore.Swagger;
     using Customer.Framework.Extensions;
-    using Swashbuckle.Swagger;
+   // using Swashbuckle.Swagger;
     using Microsoft.OpenApi.Models;
 
     public class Startup

@@ -8,7 +8,7 @@
     using Customer.Framework.Services.Interface;
     using System;
 
-    [Route("api/account")]
+    [Route("api/Customer")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
