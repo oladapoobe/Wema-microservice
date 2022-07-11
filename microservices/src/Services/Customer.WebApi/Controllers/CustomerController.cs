@@ -40,6 +40,7 @@
             return Ok(transactionResult);
         }
 
+        
         [HttpPost("GetOTP")]
         public async Task<IActionResult> GetOTP([FromBody] OTPModel obj)
         {
@@ -60,7 +61,7 @@
             var transactionResult = await _localgovtService.LocalGovt(stateid);
             return Ok(transactionResult);
         }
-
+      
         [HttpGet("State")]
         public async Task<IActionResult> State()
         {

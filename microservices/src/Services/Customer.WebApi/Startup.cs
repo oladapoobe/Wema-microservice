@@ -9,7 +9,8 @@
     using Microsoft.Extensions.Logging;
     using Swashbuckle.AspNetCore.Swagger;
     using Customer.Framework.Extensions;
-  
+    using Swashbuckle.Swagger;
+    using Microsoft.OpenApi.Models;
 
     public class Startup
     {
@@ -27,10 +28,11 @@
             services.AddScoped<ExceptionHandlerMiddleware>();
           
             services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddControllers();
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new Info { Title = "Simple Transaction Processing", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Microservice Wema", Version = "v1" });
             });
-           services.AddMvc();
+           //services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +47,17 @@
             log.AddApplicationInsights(app.ApplicationServices, LogLevel.Information);
             app.UseSwagger();
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple Transaction Processing v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Microservice Wema v1");
             });
-            app.UseMvc();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+              
+            });
+            //app.UseMvc();
         }
     }
 }

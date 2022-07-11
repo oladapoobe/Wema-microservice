@@ -32,6 +32,7 @@
 
         public async Task<JsonResponseResult> OnboardCustomers(CustomerModel obj)
         {
+
             var accountTransactionEntity = _mapper.Map<Customer>(obj);
             var res = new JsonResponseResult { IsSuccessful = false, Message = "OTP not sent" };
 

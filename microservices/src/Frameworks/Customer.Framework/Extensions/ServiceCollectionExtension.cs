@@ -14,10 +14,18 @@
     {
         public static IServiceCollection AddTransactionFramework(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient( typeof(IHttpClientWrapperRespository<>), typeof(HttpClientWrapperRespository<>));
+            services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             // Service
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ILocalGovtService, LocalGovtService>();
+            services.AddScoped<IOTPService, OTPService>();
+            services.AddScoped<IStateService, StateService>();
+    
             services.Configure<SmsSettings>(c => configuration.GetSection("SmsSettings"));
             services.AddTransient<ISmsService, SmsService>();
+            services.AddAutoMapper();
+
             // Connection String
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection")));
 
