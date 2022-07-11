@@ -11,18 +11,27 @@
     using Customer.Framework.Extensions;
     using Newtonsoft.Json;
     using Customer.Framework.Domain.Models;
+    using System.Collections.Generic;
 
     public class CustomerService : ICustomerService
     {
         
         private readonly IHttpClientWrapperRespository<Customer> _IhttpClientWrapperRepository;
+        private readonly IRepositoryBase<LocalGovernment> _LocalGovtRepositoryBase;
+        private readonly IRepositoryBase<State> _StateIRepositoryBase;
+
         private readonly IRepositoryBase<Customer> _asyncRepositoryRepository;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public CustomerService(IHttpClientWrapperRespository<Customer> IhttpClientWrapperRepository, IRepositoryBase<Customer> asyncRepositoryRepository, IMapper mapper, ILogger<CustomerService> logger)
+        public CustomerService(IHttpClientWrapperRespository<Customer> IhttpClientWrapperRepository,
+            IRepositoryBase<LocalGovernment> LocalGovtRepositoryBase, IRepositoryBase<State> StateIRepositoryBase,
+            IRepositoryBase<Customer> asyncRepositoryRepository, IMapper mapper, ILogger<CustomerService> logger)
         {
             _IhttpClientWrapperRepository = IhttpClientWrapperRepository ?? throw new ArgumentNullException(nameof(IhttpClientWrapperRepository));
+            _LocalGovtRepositoryBase = LocalGovtRepositoryBase ?? throw new ArgumentNullException(nameof(LocalGovtRepositoryBase));
+            _StateIRepositoryBase = StateIRepositoryBase ?? throw new ArgumentNullException(nameof(StateIRepositoryBase));
+
             _asyncRepositoryRepository = asyncRepositoryRepository ?? throw new ArgumentNullException(nameof(asyncRepositoryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -39,12 +48,24 @@
             var resultcheck = _asyncRepositoryRepository.AddAsync(accountTransactionEntity).Result;
             if (resultcheck != null)
             {
-                _ = _asyncRepositoryRepository.SaveAsync();
+                await _asyncRepositoryRepository.SaveAsync();
                 res = new JsonResponseResult { IsSuccessful = true, Message = "customer onboard successfull" };
 
             }
 
             return await Task.FromResult(res);
+        }
+
+
+        public async Task<IReadOnlyList<Customer>> GetAllCustomers()
+        {
+            var resultcheck = _asyncRepositoryRepository.GetAllAsync().Result;
+            foreach (var customer in resultcheck) {
+                customer.Lga = _LocalGovtRepositoryBase.Findsync(x => x.Id == int.Parse(customer.Lga)).Result.Name;
+                customer.State = _StateIRepositoryBase.Findsync(x => x.Id == int.Parse(customer.State)).Result.Name;
+            }
+
+            return await Task.FromResult(resultcheck);
         }
 
 

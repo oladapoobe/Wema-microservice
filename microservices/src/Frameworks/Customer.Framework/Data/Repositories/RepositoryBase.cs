@@ -67,34 +67,31 @@ namespace Customer.Framework.Data.Interface
             return  await _dbContext.Set<T>().Where(predicate).FirstOrDefaultAsync();
         }
 
-        public async Task<T> AddAsync(T entity)
+        public Task<T> AddAsync(T entity)
         {
             _dbContext.Set<T>().Add(entity);
-
-            return await Task.FromResult(entity);
+          
+            return Task.FromResult(entity);
              
         }
 
-        public async Task<bool> UpdateAsync(T entity)
+        public Task<bool> UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
 
-            return await Task.FromResult(true);  
+            return Task.FromResult(true);  
       
       
         }
 
-        public async Task<bool> DeleteAsync(T entity)
+        public Task<bool> DeleteAsync(T entity)
         {
              _dbContext.Set<T>().Remove(entity);
 
-            return await Task.FromResult(true);
+            return Task.FromResult(true);
         }
 
-        public async Task SaveAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-          
-        }
+        public Task SaveAsync() => _dbContext.SaveChangesAsync();
+       
     }
 }

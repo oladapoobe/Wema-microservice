@@ -40,7 +40,15 @@
             return Ok(transactionResult);
         }
 
-        
+        [HttpGet("GetAllCustomer")]
+        public async Task<IActionResult> GetAllCustomer()
+        {
+            var transactionResult = await _customerService.GetAllCustomers();
+    
+            return Ok(transactionResult);
+        }
+
+
         [HttpPost("GetOTP")]
         public async Task<IActionResult> GetOTP([FromBody] OTPModel obj)
         {

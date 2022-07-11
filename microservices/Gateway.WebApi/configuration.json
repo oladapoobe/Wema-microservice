@@ -12,7 +12,7 @@
       ],
       "UpstreamPathTemplate": "/Customer/OnboardCustomer",
       "UpstreamHttpMethod": [ "Get" ]
-      
+
     },
     {
       "DownstreamPathTemplate": "/api/Customer/GetOTP",
@@ -26,7 +26,7 @@
       //The UpstreamPathTemplate is the URL that Ocelot will use to identify which DownstreamPathTemplate to use for a given request
       "UpstreamPathTemplate": "/Customer/GetOTP",
       "UpstreamHttpMethod": [ "Post" ]
-     
+
     },
     {
       "DownstreamPathTemplate": "/api/Customer/ValidateOtp",
@@ -39,7 +39,7 @@
       ],
       "UpstreamPathTemplate": "/Customer/ValidateOtp",
       "UpstreamHttpMethod": [ "Post" ]
-     
+
     },
     //The UpstreamPathTemplate is the URL that Ocelot will use to identify which DownstreamPathTemplate to use for a given request
 
@@ -54,7 +54,7 @@
       ],
       "UpstreamPathTemplate": "/Customer/LocalGovt",
       "UpstreamHttpMethod": [ "Post" ]
-      
+
     },
 
 
@@ -69,10 +69,24 @@
       ],
       "UpstreamPathTemplate": "/Customer/State",
       "UpstreamHttpMethod": [ "Post" ]
-      
+
     }
+
+
     //The UpstreamPathTemplate is the URL that Ocelot will use to identify which DownstreamPathTemplate to use for a given request
 
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "contacts",
+      "Config": [
+        {
+          "Name": "Contacts API",
+          "Version": "v1",
+          "Url": "http://localhost:5100/swagger/v1/swagger.json"
+        }
+      ]
+    }
   ],
   "GlobalConfiguration": {
     "UseServiceDiscovery": false

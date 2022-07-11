@@ -56,8 +56,11 @@ namespace Customer.Framework.Services.Interface
             foreach (var a in resultcheck)
             {
                 a.DateExpired = DateTime.Now;
-                _ = _asyncRepositoryRepository.UpdateAsync(a);
-                _ = _asyncRepositoryRepository.SaveAsync();
+                var updateresult = _asyncRepositoryRepository.UpdateAsync(a).Result;
+                if (updateresult)
+                {
+                    await _asyncRepositoryRepository.SaveAsync();
+                }
             }
 
             var Otp = GenerateRndNumber(7);
@@ -70,7 +73,7 @@ namespace Customer.Framework.Services.Interface
 
             if (result != null)
             {
-                _ = _asyncRepositoryRepository.SaveAsync();
+                await _asyncRepositoryRepository.SaveAsync();
                 string Message = "Dear Customer Please use" + " " + Otp + " " + "to complete this process on the portal. This code will expire in 10 Minutes";
                 var Smsobj = new SMS { Body = Message, PhoneNumber = PhoneNumber };
                 var sendTextMessage = _smsService.SendSMS(Smsobj).Result;
@@ -110,8 +113,12 @@ namespace Customer.Framework.Services.Interface
             else
             {
                 result.DateExpired = DateTime.Now;
-                _ = _asyncRepositoryRepository.UpdateAsync(result);
-                _ = _asyncRepositoryRepository.SaveAsync();
+                var updateresult = _asyncRepositoryRepository.UpdateAsync(result).Result;
+                if (updateresult)
+                {
+                    await _asyncRepositoryRepository.SaveAsync();
+                }
+               
                 return await Task.FromResult(new JsonResponseResult { IsSuccessful = false, Message = "OTP Validated successfully" });
 
             }

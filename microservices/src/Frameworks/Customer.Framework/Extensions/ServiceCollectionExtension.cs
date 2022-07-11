@@ -9,6 +9,7 @@
     using Customer.Framework.Services.Interface;
     using AutoMapper;
     using Customer.Framework.Domain.Models;
+    using Customer.Framework.Mappers;
 
     public static class ServiceCollectionExtension
     {
@@ -24,7 +25,7 @@
     
             services.Configure<SmsSettings>(c => configuration.GetSection("SmsSettings"));
             services.AddTransient<ISmsService, SmsService>();
-            services.AddAutoMapper();
+            services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
 
             // Connection String
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection")));
