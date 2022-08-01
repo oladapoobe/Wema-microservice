@@ -83,7 +83,22 @@
       "UpstreamHttpMethod": [ "Get" ],
       "SwaggerKey": "Customer"
 
+    },
+    {
+      "DownstreamPathTemplate": "/api/Customer/Getbanks",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 60243
+        }
+      ],
+      "UpstreamPathTemplate": "/Customer/Getbanks",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "Customer"
+
     }
+
   ],
   "SwaggerEndPoints": [
     {

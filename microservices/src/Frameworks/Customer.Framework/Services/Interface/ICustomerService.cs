@@ -10,5 +10,6 @@
     {
         Task<JsonResponseResult> OnboardCustomers(CustomerModel obj);
         Task<IReadOnlyList<Customer>> GetAllCustomers();
+        Task<ResultList> Getbanks();
     }
 }

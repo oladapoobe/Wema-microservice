@@ -23,9 +23,13 @@ namespace Customer
                 {
                     _client.BaseAddress = new Uri(BaseUrl);
                     var response = _client.GetAsync(EndpointUrl).Result;
-                    var content = response.Content.ReadAsStringAsync().Result;
-                    var Item = JsonConvert.DeserializeObject<T>(content);
-                    return Item;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = response.Content.ReadAsStringAsync().Result;
+                        var Item = JsonConvert.DeserializeObject<T>(content);
+                        return Item;
+                    }
+                    throw new Exception(response.ReasonPhrase);
                     //}
 
                 }

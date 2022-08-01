@@ -15,6 +15,9 @@
     {
         public static IServiceCollection AddTransactionFramework(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<Settings>(options => configuration.GetSection("Settings").Bind(options));
+
+           // services.Configure<Settings>(c => configuration.GetSection("Settings"));
             services.AddTransient( typeof(IHttpClientWrapperRespository<>), typeof(HttpClientWrapperRespository<>));
             services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             // Service
@@ -23,7 +26,6 @@
             services.AddScoped<IOTPService, OTPService>();
             services.AddScoped<IStateService, StateService>();
     
-            services.Configure<SmsSettings>(c => configuration.GetSection("SmsSettings"));
             services.AddTransient<ISmsService, SmsService>();
             services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
 

@@ -76,5 +76,15 @@
             var transactionResult = await _stateService.State();
             return Ok(transactionResult);
         }
+
+
+        [HttpGet("Getbanks")]
+        public async Task<IActionResult> Getbanks()
+        {
+            var transactionResult = await _customerService.Getbanks();
+            return Ok(transactionResult);
+        }
+
+
     }
 }

@@ -12,19 +12,24 @@
     using Newtonsoft.Json;
     using Customer.Framework.Domain.Models;
     using System.Collections.Generic;
+    using Microsoft.Extensions.Options;
+    using AutoMapper.Configuration;
 
     public class CustomerService : ICustomerService
     {
-        
-        private readonly IHttpClientWrapperRespository<Customer> _IhttpClientWrapperRepository;
+
+        private readonly IHttpClientWrapperRespository<ResultList> _IhttpClientWrapperRepository;
         private readonly IRepositoryBase<LocalGovernment> _LocalGovtRepositoryBase;
         private readonly IRepositoryBase<State> _StateIRepositoryBase;
 
         private readonly IRepositoryBase<Customer> _asyncRepositoryRepository;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        public Settings _eSettings { get; }
+     
 
-        public CustomerService(IHttpClientWrapperRespository<Customer> IhttpClientWrapperRepository,
+
+        public CustomerService(IOptions<Settings> eSettings, IHttpClientWrapperRespository<ResultList> IhttpClientWrapperRepository,
             IRepositoryBase<LocalGovernment> LocalGovtRepositoryBase, IRepositoryBase<State> StateIRepositoryBase,
             IRepositoryBase<Customer> asyncRepositoryRepository, IMapper mapper, ILogger<CustomerService> logger)
         {
@@ -35,9 +40,12 @@
             _asyncRepositoryRepository = asyncRepositoryRepository ?? throw new ArgumentNullException(nameof(asyncRepositoryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _eSettings = eSettings.Value;
+           
+        
         }
 
-   
+
 
         public async Task<JsonResponseResult> OnboardCustomers(CustomerModel obj)
         {
@@ -60,7 +68,8 @@
         public async Task<IReadOnlyList<Customer>> GetAllCustomers()
         {
             var resultcheck = _asyncRepositoryRepository.GetAllAsync().Result;
-            foreach (var customer in resultcheck) {
+            foreach (var customer in resultcheck)
+            {
                 customer.Lga = _LocalGovtRepositoryBase.Findsync(x => x.Id == int.Parse(customer.Lga)).Result.Name;
                 customer.State = _StateIRepositoryBase.Findsync(x => x.Id == int.Parse(customer.State)).Result.Name;
             }
@@ -69,13 +78,13 @@
         }
 
 
+        public async Task<ResultList> Getbanks()
+        {
+          
+            var banklist = _IhttpClientWrapperRepository.GetAsyncItem(_eSettings.BaseUrl, _eSettings.Endpoint);
+            return await Task.FromResult(banklist);
 
-        //public async Task<JsonResponseResult> Getbanks()
-        //{
-        //    var accountSummary = await GetAccountSummary(accountNumber);
-        //    await accountSummary.Validate(accountNumber);
-        //    return _mapper.Map<TransactionResult>(accountSummary);
-        //}
+        }
 
 
 

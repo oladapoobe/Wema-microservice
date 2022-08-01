@@ -19,9 +19,9 @@ namespace Customer.Framework.Services.Interface
 
         public ILogger<SmsService> _logger { get; }
         private readonly IHttpClientWrapperRespository<HttpRequestMessage> _IhttpClientWrapperRepository;
-        public SmsSettings _emailSettings { get; }
+        public Settings _emailSettings { get; }
 
-        public SmsService(IOptions<SmsSettings> mailSettings, ILogger<SmsService> logger, IHttpClientWrapperRespository<HttpRequestMessage> IhttpClientWrapperRepository)
+        public SmsService(IOptions<Settings> mailSettings, ILogger<SmsService> logger, IHttpClientWrapperRespository<HttpRequestMessage> IhttpClientWrapperRepository)
         {
             _emailSettings = mailSettings.Value;
             _logger = logger;
