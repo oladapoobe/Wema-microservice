@@ -52,29 +52,9 @@ public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     }
 }
 ```
-## Db Concurrency Handling
-
-Db concurrency is related to a conflict when multiple transactions trying to update the same data in the database at the same time. In the below diagram, if you see that Transaction 1 and Transaction 2 are against the same account, one trying to deposit amount into account and the other system tring to Withdraw amount from the account at the same time. The framework contains two logical layers, one handles the Business Logic and the other handles the Data logic. 
-
-When a data is read from the DB and when business logic is applied to the data, at this context, there will be three different states for the values relating to the same record.
-
-- **Database values** are the values currently stored in the database.
-- **Original values** are the values that were originally retrieved from the database
-- **Current values** are the new values that application attempting to write to the database.
-
-The state of the values in each of the transaction produces a conflict when the system attempts to save the changes and identifies using the concurrency token that the values being updated to the database are not the Original values that was read from the database and it throws DbUpdateConcurrencyException.
-
-
-The general approach to handle the concurrency conflict is:
-
-1. Catch **DbUpdateConcurrencyException** during SaveChanges
-2. Use **DbUpdateConcurrencyException.Entries** to prepare a new set of changes for the affected entities.
-3. **Refresh the original values** of the concurrency token to reflect the current values in the database.
-4. **Retry the process** until no conflicts occur.
-
 ## Azure AppInsights: Logging and Monitoring
 
-Azure AppInsights integrated into the "Transaction Microservice" for collecting the application Telemetry.
+Azure AppInsights integrated into the "Customer Microservice" for collecting the application Telemetry.
 
 ```
 public void ConfigureServices(IServiceCollection services)
@@ -100,42 +80,21 @@ To use AppInsights, you need to have a Azure account and  create a AppInsights i
   },
 ```
 ---
-## Swagger: API Documentation
-
-Swashbuckle Nuget package added to the "Transaction Microservice" and Swagger Middleware configured in the startup.cs for API documentation. when running the WebApi service, the swagger UI can be accessed through the swagger endpoint "/swagger".
-
-```
-public void ConfigureServices(IServiceCollection services)
-{            
-     services.AddSwaggerGen(c => {
-        c.SwaggerDoc("v1", new Info { Title = "Simple Transaction Processing", Version = "v1" });
-     });
-}
-```
-
-```
-public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log)
-{           
-     app.UseSwagger();
-     app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple Transaction Processing v1");
-     });           
-}
-```
 
 
 ## How to run the application
 
 
 1. Open the solution (.sln) in Visual Studio 2017 or later version
-2. Configure the SQL connection string in Transaction.WebApi -> Appsettings.json file
+2. Configure the SQL connection string in Customer.WebApi -> Appsettings.json file
 3. Configure the AppInsights Instrumentation Key in Transaction.WebApi -> Appsettings.json file. If you dont  have a key or don't require logs then comment the AppInsight related code in Startup.cs file 
-4. Check the Identity.WebApi -> UserService.cs file for Identity info. User details are hard coded for few accounts in Identity service which can be used to run the app. Same details shown in the below table.
-5. Run the following projects in the solution
+
+4. Run the following projects in the solution
     - Customer.WebApi
     - Gateway.WebApi
-6. Gateway host and port should be configured correctly in the ConsoleApp
-7. Idenity and Transaction service host and port should be configured correctly in the gateway -> configuration.json 
+5. Gateway host and port should be configured correctly in the ConsoleApp
+6. Idenity and Transaction service host and port should be configured correctly in the gateway -> configuration.json 
+7. Attached is the sql query to run for your database , which attached as wema script 
 
 
 ## Console App - Gateway Client
