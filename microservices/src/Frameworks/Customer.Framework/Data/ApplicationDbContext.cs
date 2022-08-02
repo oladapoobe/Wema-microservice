@@ -25,6 +25,9 @@
             base.OnModelCreating(modelBuilder);
         }
 
+       
+
+
         DbSet<LocalGovernment> LocalGovernments { get; set; }
         DbSet<Customer> Customers { get; set; }
         DbSet<OtpLog> OtpLogs { get; set; }

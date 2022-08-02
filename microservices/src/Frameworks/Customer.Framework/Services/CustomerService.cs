@@ -14,6 +14,7 @@
     using System.Collections.Generic;
     using Microsoft.Extensions.Options;
     using AutoMapper.Configuration;
+    using System.Text;
 
     public class CustomerService : ICustomerService
     {
@@ -49,7 +50,7 @@
 
         public async Task<JsonResponseResult> OnboardCustomers(CustomerModel obj)
         {
-
+            obj.Pasword = Convert.ToBase64String(Encoding.UTF8.GetBytes(obj.Pasword));
             var accountTransactionEntity = _mapper.Map<Customer>(obj);
             var res = new JsonResponseResult { IsSuccessful = false, Message = "OTP not sent" };
 
